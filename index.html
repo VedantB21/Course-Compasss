@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Compass - Navigate Your Future</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --text-dark: #1f2937;
+            --text-light: #64748b;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        [data-theme="dark"] {
+            --light: #1f2937;
+            --dark: #f8fafc;
+            --text-dark: #f8fafc;
+            --text-light: #cbd5e1;
+            --glass: rgba(0, 0, 0, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Smooth scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: var(--light);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            background: var(--glass);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 80%;
+            left: 10%;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            color: var(--text-dark);
+        }
+
+        .theme-toggle:hover {
+            background: var(--glass);
+            transform: rotate(180deg);
+        }
+
+        .mobile-menu {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, var(--light) 0%, #e0e7ff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a"><stop offset="0" stop-color="%236366f1" stop-opacity=".1"/><stop offset="1" stop-color="%236366f1" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="180" fill="url(%23a)"><animateTransform attributeName="transform" type="translate" values="0,0;50,100;0,0" dur="20s" repeatCount="indefinite"/></circle><circle cx="800" cy="400" r="120" fill="url(%23a)"><animateTransform attributeName="transform" type="translate" values="0,0;-30,80;0,0" dur="15s" repeatCount="indefinite"/></circle><circle cx="400" cy="800" r="200" fill="url(%23a)"><animateTransform attributeName="transform" type="translate" values="0,0;80,-50;0,0" dur="25s" repeatCount="indefinite"/></circle></svg>') no-repeat center;
+            background-size: cover;
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            animation: slideInUp 1s ease-out 0.2s both;
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--gradient-1);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            animation: slideInUp 1s ease-out 0.4s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Stream Selection */
+        .streams {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 4rem;
+        }
+
+        .stream-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stream-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stream-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .stream-card:hover::before {
+            left: 100%;
+        }
+
+        .stream-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .stream-card.arts {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.05));
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .stream-card.commerce {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(52, 211, 153, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .stream-card.science {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.05));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .stream-card.diploma {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(14, 165, 233, 0.05));
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .stream-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .stream-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .stream-card p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .stream-card .btn {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .stream-card .btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-3);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: var(--light);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: modalSlide 0.3s ease forwards;
+        }
+
+        @keyframes modalSlide {
+            to {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--glass);
+            color: var(--text-dark);
+        }
+
+        .career-list {
+            list-style: none;
+        }
+
+        .career-item {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .career-item:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(10px);
+        }
+
+        .career-item h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .career-item p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer p {
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-links a {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: var(--glass);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .stream-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--glass);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Smooth page transitions */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-1);
+            transform: translateX(-100%);
+            z-index: 9998;
+            transition: transform 0.5s ease;
+        }
+
+        .page-transition.active {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Page Transition -->
+    <div class="page-transition" id="pageTransition"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">Course Compass</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#streams">Streams</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#" onclick="showPage('career-counselling')">Counselling</a></li>
+                <li><a href="#" onclick="showPage('scholarships')">Scholarships</a></li>
+                <li><a href="#" onclick="showPage('progress')">Progress</a></li>
+            </ul>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="mobile-menu" id="mobileMenu">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Navigate Your Future with Confidence</h1>
+            <p>Discover your ideal career path with personalized guidance, expert counselling, and comprehensive resources tailored for students after 10th, 12th, and graduation.</p>
+            <a href="#streams" class="cta-button">Explore Streams</a>
+        </div>
+    </section>
+
+    <!-- Stream Selection -->
+    <section class="streams" id="streams">
+        <h2 class="section-title">Choose Your Stream</h2>
+        <p class="section-subtitle">Select your academic stream to explore tailored career opportunities</p>
+        
+        <div class="stream-grid">
+            <div class="stream-card arts" onclick="openStreamModal('arts')">
+                <span class="stream-icon">🎨</span>
+                <h3>Arts & Humanities</h3>
+                <p>Explore creative and analytical career paths in literature, history, psychology, and more.</p>
+                <span class="btn">Explore Careers</span>
+            </div>
+            
+            <div class="stream-card commerce" onclick="openStreamModal('commerce')">
+                <span class="stream-icon">💼</span>
+                <h3>Commerce</h3>
+                <p>Dive into business, finance, accounting, and entrepreneurship opportunities.</p>
+                <span class="btn">Explore Careers</span>
+            </div>
+            
+            <div class="stream-card science" onclick="openStreamModal('science')">
+                <span class="stream-icon">🔬</span>
+                <h3>Science</h3>
+                <p>Discover careers in engineering, medicine, research, and technology.</p>
+                <span class="btn">Explore Careers</span>
+            </div>
+            
+            <div class="stream-card diploma" onclick="openStreamModal('diploma')">
+                <span class="stream-icon">⚙️</span>
+                <h3>Diploma & Vocational</h3>
+                <p>Practical skill-based programs for immediate industry entry.</p>
+                <span class="btn">Explore Careers</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <h2 class="section-title">Why Choose Course Compass?</h2>
+            <p class="section-subtitle">Comprehensive tools and resources to guide your career journey</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 style="color: black;">Personalized Guidance</h3>
+                    <p style="color: black;">Get tailored career recommendations based on your interests, skills, and academic background.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎓</div>
+                    <h3 style="color: black;">Course & College Info</h3>
+                    <p style="color: black;">Comprehensive database of courses, colleges, and admission requirements.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h3 style="color: black;">Skills Assessment</h3>
+                    <p style="color: black;">Identify your strengths and areas for improvement with our detailed skills mapping.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3 style="color: black;">Success Stories</h3>
+                    <p style="color: black;">Learn from real experiences of students who've successfully navigated their career paths.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3 style="color: black;">Scholarship Finder</h3>
+                    <p style="color: black;">Discover financial aid opportunities and scholarships that match your profile.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 style="color: black;">Progress Tracking</h3>
+                    <p style="color: black;">Monitor your applications, deadlines, and career preparation progress.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div class="modal" id="streamModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Career Options</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <ul class="career-list" id="careerList"></ul>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" style="background-color: #1f2937;">
+        <div class="footer-content">
+            <h3>Course Compass</h3>
+            <p>Empowering students to make informed career decisions and build successful futures.</p>
+            <div class="social-links">
+                <a href="#">📧</a>
+                <a href="#">📱</a>
+                <a href="#">🌐</a>
+                <a href="#">💼</a>
+            </div>
+            <p>&copy; 2025 Course Compass. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Floating Action Button -->
+    <button class="fab" onclick="showPage('chat')" title="Get Help">💬</button>
+
+    <script>
+        // Career data
+        const careerData = {
+            arts: [
+                { title: "Journalist", description: "Report news and create engaging content for various media platforms" },
+                { title: "Psychologist", description: "Study human behavior and provide mental health support" },
+                { title: "Graphic Designer", description: "Create visual concepts and designs for digital and print media" },
+                { title: "Social Worker", description: "Help individuals and communities overcome challenges" },
+                { title: "Lawyer", description: "Provide legal advice and represent clients in legal matters" },
+                { title: "Teacher", description: "Educate and inspire students in academic subjects" },
+                { title: "Content Writer", description: "Create written content for websites, blogs, and marketing materials" },
+                { title: "Historian", description: "Research and analyze historical events and their significance" }
+            ],
+            commerce: [
+                { title: "Chartered Accountant", description: "Manage financial records and provide accounting services" },
+                { title: "Investment Banker", description: "Help companies and governments raise capital through securities" },
+                { title: "Marketing Manager", description: "Develop and execute marketing strategies for products and services" },
+                { title: "Entrepreneur", description: "Start and manage your own business ventures" },
+                { title: "Financial Analyst", description: "Analyze financial data to guide investment decisions" },
+                { title: "Business Consultant", description: "Advise organizations on improving their business operations" },
+                { title: "Sales Manager", description: "Lead sales teams and develop customer relationships" },
+                { title: "HR Manager", description: "Oversee employee relations and organizational development" }
+            ],
+            science: [
+                { title: "Software Engineer", description: "Design and develop software applications and systems" },
+                { title: "Doctor", description: "Diagnose and treat illnesses to help patients maintain good health" },
+                { title: "Research Scientist", description: "Conduct experiments and research to advance scientific knowledge" },
+                { title: "Data Scientist", description: "Analyze complex data to help organizations make informed decisions" },
+                { title: "Biomedical Engineer", description: "Develop medical devices and equipment to improve healthcare" },
+                { title: "Environmental Scientist", description: "Study the environment and develop solutions to environmental problems" },
+                { title: "Aerospace Engineer", description: "Design and develop aircraft, spacecraft, and related systems" },
+                { title: "Pharmacist", description: "Dispense medications and provide pharmaceutical care to patients" }
+            ],
+            diploma: [
+                { title: "Web Developer", description: "Build and maintain websites and web applications" },
+                { title: "Electrician", description: "Install and maintain electrical systems in buildings and infrastructure" },
+                { title: "Mechanical Technician", description: "Operate and maintain mechanical equipment and machinery" },
+                { title: "Digital Marketing Specialist", description: "Promote products and services through digital channels" },
+                { title: "Graphic Design Technician", description: "Create visual designs for various media and marketing materials" },
+                { title: "Computer Hardware Technician", description: "Install, maintain, and repair computer hardware systems" },
+                { title: "Civil Engineering Technician", description: "Assist in the design and construction of infrastructure projects" },
+                { title: "Hospitality Manager", description: "Oversee operations in hotels, restaurants, and tourism businesses" }
+            ]
+        };
+
+        // Page content for different sections
+        const pageContent = {
+            'career-counselling': `
+                <div style="padding: 2rem; max-width: 800px; margin: 0 auto;">
+                    <h2 style="text-align: center; margin-bottom: 2rem; color: var(--primary);">Career Counselling</h2>
+                    <div style="background: var(--glass); padding: 2rem; border-radius: 20px; margin-bottom: 2rem;">
+                        <h3>AI Career Assistant</h3>
+                        <div id="chatContainer" style="height: 400px; background: white; border-radius: 15px; padding: 1rem; margin: 1rem 0; overflow-y: auto; border: 1px solid var(--glass-border);">
+                            <div style="text-align: center; color: var(--text-light); margin-top: 150px;">
+                                👋 Hi! I'm your AI career assistant. Ask me anything about career paths, courses, or skills!
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <input type="text" id="chatInput" placeholder="Ask about your career concerns..." style="flex: 1; padding: 1rem; border: 1px solid var(--glass-border); border-radius: 25px; outline: none;">
+                            <button onclick="sendMessage()" style="background: var(--primary); color: white; border: none; padding: 1rem 2rem; border-radius: 25px; cursor: pointer;">Send</button>
+                        </div>
+                    </div>
+                    <div style="background: var(--glass); padding: 2rem; border-radius: 20px;">
+                        <h3>Connect with Human Mentors</h3>
+                        <p style="margin-bottom: 1.5rem; color: var(--text-light);">Get personalized guidance from industry experts and experienced professionals.</p>
+                        <button onclick="bookMentor()" style="background: var(--success); color: white; border: none; padding: 1rem 2rem; border-radius: 25px; cursor: pointer;">Book a Session</button>
+                    </div>
+                </div>
+            `,
+            'scholarships': `
+                <div style="padding: 2rem; max-width: 1000px; margin: 0 auto;">
+                    <h2 style="text-align: center; margin-bottom: 2rem; color: var(--primary);">Scholarship Opportunities</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                        <div style="background: var(--glass); padding: 2rem; border-radius: 20px;">
+                            <h3 style="color: var(--success);">Merit-Based Scholarships</h3>
+                            <p style="margin-bottom: 1rem; color: var(--text-light);">Scholarships awarded based on academic excellence and achievements.</p>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--glass-border);">🏆 National Merit Scholarship - Up to ₹2,00,000</li>
+                                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--glass-border);">📚 Academic Excellence Award - Up to ₹1,50,000</li>
+                                <li style="padding: 0.5rem 0;">🎯 Subject Topper Scholarship - Up to ₹1,00,000</li>
+                            </ul>
+                        </div>
+                        <div style="background: var(--glass); padding: 2rem; border-radius: 20px;">
+                            <h3 style="color: var(--warning);">Need-Based Scholarships</h3>
+                            <p style="margin-bottom: 1rem; color: var(--text-light);">Financial assistance for students from economically weaker sections.</p>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--glass-border);">💰 EWS Scholarship - Up to ₹3,00,000</li>
+                                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--glass-border);">🏠 Rural Development Fund - Up to ₹2,50,000</li>
+                                <li style="padding: 0.5rem 0;">👨‍👩‍👧‍👦 Single Parent Support - Up to ₹2,00,000</li>
+                            </ul>
+                        </div>
+                        <div style="background: var(--glass); padding: 2rem; border-radius: 20px;">
+                            <h3 style="color: var(--accent);">Category-Based Scholarships</h3>
+                            <p style="margin-bottom: 1rem; color: var(--text-light);">Special scholarships for reserved categories and minorities.</p>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--glass-border);">🎓 SC/ST Scholarship - Up to ₹2,75,000</li>
+                                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--glass-border);">🌟 Minority Scholarship - Up to ₹2,25,000</li>
+                                <li style="padding: 0.5rem 0;">♿ Differently Abled Support - Up to ₹3,50,000</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <button onclick="applyScholarship()" style="background: var(--gradient-1); color: white; border: none; padding: 1rem 3rem; border-radius: 25px; cursor: pointer; font-size: 1.1rem;">Apply for Scholarships</button>
+                    </div>
+                </div>
+            `,
+            'progress': `
+                <div style="padding: 2rem; max-width: 900px; margin: 0 auto;">
+                    <h2 style="text-align: center; margin-bottom: 2rem; color: var(--primary);">Progress Tracker</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                        <div style="background: var(--glass); padding: 2rem; border-radius: 20px; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">📝</div>
+                            <h3 style="color: var(--primary);">Applications</h3>
+                            <p style="font-size: 2rem; font-weight: bold; color: var(--success);" id="applicationCount">8</p>
+                            <p style="color: var(--text-light);">Submitted</p>
+                        </div>
+                        <div style="background: var(--glass); padding: 2rem; border-radius: 20px; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">⏰</div>
+                            <h3 style="color: var(--warning);">Deadlines</h3>
+                            <p style="font-size: 2rem; font-weight: bold; color: var(--warning);" id="deadlineCount">3</p>
+                            <p style="color: var(--text-light);">Upcoming</p>
+                        </div>
+                        <div style="background: var(--glass); padding: 2rem; border-radius: 20px; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">✅</div>
+                            <h3 style="color: var(--success);">Completed</h3>
+                            <p style="font-size: 2rem; font-weight: bold; color: var(--success);" id="completedCount">12</p>
+                            <p style="color: var(--text-light);">Tasks</p>
+                        </div>
+                    </div>
+                    <div style="background: var(--glass); padding: 2rem; border-radius: 20px; margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1.5rem;">Recent Activities</h3>
+                        <div style="space-y: 1rem;">
+                            <div style="display: flex; align-items: center; padding: 1rem; background: white; border-radius: 10px; margin-bottom: 1rem;">
+                                <div style="width: 40px; height: 40px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 1rem; color: white;">✓</div>
+                                <div style="flex: 1;">
+                                    <h4>Application submitted to IIT Delhi</h4>
+                                    <p style="color: var(--text-light); font-size: 0.9rem;">Computer Science Engineering - 2 days ago</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; padding: 1rem; background: white; border-radius: 10px; margin-bottom: 1rem;">
+                                <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 1rem; color: white;">📄</div>
+                                <div style="flex: 1;">
+                                    <h4>Document verification completed</h4>
+                                    <p style="color: var(--text-light); font-size: 0.9rem;">All required documents uploaded - 5 days ago</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; padding: 1rem; background: white; border-radius: 10px;">
+                                <div style="width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 1rem; color: white;">🎯</div>
+                                <div style="flex: 1;">
+                                    <h4>Career assessment completed</h4>
+                                    <p style="color: var(--text-light); font-size: 0.9rem;">Recommended paths: Engineering, Data Science - 1 week ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <button onclick="addNewApplication()" style="background: var(--primary); color: white; border: none; padding: 1rem 2rem; border-radius: 25px; cursor: pointer; margin-right: 1rem;">Add Application</button>
+                        <button onclick="viewAllProgress()" style="background: transparent; color: var(--primary); border: 2px solid var(--primary); padding: 1rem 2rem; border-radius: 25px; cursor: pointer;">View All</button>
+                    </div>
+                </div>
+            `,
+            'chat': `
+                <div style="position: fixed; bottom: 100px; right: 2rem; width: 350px; height: 500px; background: white; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); z-index: 1001; display: flex; flex-direction: column;">
+                    <div style="background: var(--gradient-1); color: white; padding: 1rem; border-radius: 20px 20px 0 0; display: flex; justify-content: space-between; align-items: center;">
+                        <h3>Quick Help</h3>
+                        <button onclick="closePage()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
+                    </div>
+                    <div style="flex: 1; padding: 1rem; overflow-y: auto;">
+                        <div style="margin-bottom: 1rem;">
+                            <h4>Quick Links:</h4>
+                            <div style="margin-top: 0.5rem;">
+                                <button onclick="showPage('career-counselling')" style="display: block; width: 100%; text-align: left; background: var(--glass); border: none; padding: 0.75rem; border-radius: 10px; margin-bottom: 0.5rem; cursor: pointer;">💬 Career Counselling</button>
+                                <button onclick="showPage('scholarships')" style="display: block; width: 100%; text-align: left; background: var(--glass); border: none; padding: 0.75rem; border-radius: 10px; margin-bottom: 0.5rem; cursor: pointer;">💰 Scholarships</button>
+                                <button onclick="showPage('progress')" style="display: block; width: 100%; text-align: left; background: var(--glass); border: none; padding: 0.75rem; border-radius: 10px; cursor: pointer;">📊 Progress Tracker</button>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Need Help?</h4>
+                            <p style="color: var(--text-light); font-size: 0.9rem;">Contact our support team for immediate assistance with your career planning journey.</p>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide loader after page loads
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1500);
+
+            // Smooth scroll for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Navbar scroll effect
+            window.addEventListener('scroll', function() {
+                const navbar = document.getElementById('navbar');
+                if (window.scrollY > 100) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = body.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                body.setAttribute('data-theme', newTheme);
+                themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                
+                // Save theme preference
+                localStorage.setItem('theme', newTheme);
+            });
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            body.setAttribute('data-theme', savedTheme);
+            themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+            // Mobile menu toggle
+            const mobileMenu = document.getElementById('mobileMenu');
+            const navLinks = document.getElementById('navLinks');
+
+            mobileMenu.addEventListener('click', function() {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
+
+            // Chat input enter key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && e.target.id === 'chatInput') {
+                    sendMessage();
+                }
+            });
+        });
+
+        // Stream modal functions
+        function openStreamModal(stream) {
+            const modal = document.getElementById('streamModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const careerList = document.getElementById('careerList');
+
+            modalTitle.textContent = `${stream.charAt(0).toUpperCase() + stream.slice(1)} Career Options`;
+            
+            careerList.innerHTML = '';
+            careerData[stream].forEach(career => {
+                const li = document.createElement('li');
+                li.className = 'career-item';
+                li.innerHTML = `
+                    <h4>${career.title}</h4>
+                    <p>${career.description}</p>
+                `;
+                li.addEventListener('click', () => {
+                    showCareerDetails(career);
+                });
+                careerList.appendChild(li);
+            });
+
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.querySelector('.modal-content').style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('streamModal');
+            modal.querySelector('.modal-content').style.transform = 'translate(-50%, -50%) scale(0.9)';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        function showCareerDetails(career) {
+            alert(`${career.title}\n\n${career.description}\n\nWould you like to know more about the required skills and courses for this career? Visit our Skills section for detailed information!`);
+        }
+
+        // Page navigation functions
+        function showPage(pageId) {
+            const transition = document.getElementById('pageTransition');
+            const body = document.body;
+
+            // Show transition
+            transition.classList.add('active');
+
+            setTimeout(() => {
+                // Remove existing page content
+                const existingPage = document.querySelector('.dynamic-page');
+                if (existingPage) {
+                    existingPage.remove();
+                }
+
+                // Create new page
+                const pageDiv = document.createElement('div');
+                pageDiv.className = 'dynamic-page';
+                pageDiv.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: var(--light);
+                    z-index: 1500;
+                    padding-top: 80px;
+                    overflow-y: auto;
+                `;
+
+                if (pageContent[pageId]) {
+                    pageDiv.innerHTML = pageContent[pageId] + `
+                        <div style="position: fixed; top: 1rem; right: 2rem; z-index: 1600;">
+                            <button onclick="closePage()" style="background: var(--primary); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 1.2rem;">✕</button>
+                        </div>
+                    `;
+                } else {
+                    pageDiv.innerHTML = `
+                        <div style="display: flex; align-items: center; justify-content: center; height: 100%; flex-direction: column;">
+                            <h2 style="color: var(--primary); margin-bottom: 1rem;">Coming Soon!</h2>
+                            <p style="color: var(--text-light); margin-bottom: 2rem;">This feature is under development.</p>
+                            <button onclick="closePage()" style="background: var(--primary); color: white; border: none; padding: 1rem 2rem; border-radius: 25px; cursor: pointer;">Go Back</button>
+                        </div>
+                    `;
+                }
+
+                body.appendChild(pageDiv);
+
+                // Hide transition
+                setTimeout(() => {
+                    transition.classList.remove('active');
+                }, 250);
+            }, 250);
+        }
+
+        function closePage() {
+            const transition = document.getElementById('pageTransition');
+            const existingPage = document.querySelector('.dynamic-page');
+
+            if (existingPage) {
+                transition.classList.add('active');
+                
+                setTimeout(() => {
+                    existingPage.remove();
+                    transition.classList.remove('active');
+                }, 250);
+            }
+        }
+
+        // Chat functionality
+        let chatMessages = [];
+
+        function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const chatContainer = document.getElementById('chatContainer');
+            const message = chatInput.value.trim();
+
+            if (!message) return;
+
+            // Add user message
+            addMessageToChat('user', message);
+            chatInput.value = '';
+
+            // Simulate AI response
+            setTimeout(() => {
+                const response = generateAIResponse(message);
+                addMessageToChat('ai', response);
+            }, 1000);
+        }
+
+        function addMessageToChat(sender, message) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            
+            messageDiv.style.cssText = `
+                margin-bottom: 1rem;
+                padding: 1rem;
+                border-radius: 15px;
+                max-width: 80%;
+                animation: slideInUp 0.3s ease;
+                ${sender === 'user' ? 
+                    'background: var(--primary); color: white; margin-left: auto; text-align: right;' : 
+                    'background: var(--glass); color: var(--text-dark);'
+                }
+            `;
+            
+            messageDiv.textContent = message;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function generateAIResponse(message) {
+            const responses = {
+                'career': "I'd be happy to help you explore career options! Could you tell me which stream you're interested in - Arts, Commerce, Science, or Diploma?",
+                'engineering': "Engineering is a great field! There are many specializations like Computer Science, Mechanical, Civil, and Electrical. What interests you most?",
+                'medicine': "Medicine is a noble profession! You'll need to excel in Biology, Chemistry, and Physics. Have you considered NEET preparation?",
+                'business': "Business offers diverse opportunities! You could pursue BBA, Economics, or even start your own venture. What aspect of business excites you?",
+                'arts': "Arts and humanities offer creative and analytical paths! Consider fields like Psychology, Literature, Journalism, or Social Work.",
+                'salary': "Salary varies by field and experience. Engineering and Medicine typically offer high starting salaries, while Arts fields may start lower but have great growth potential.",
+                'college': "Choosing the right college is crucial! Consider factors like accreditation, placement records, faculty, and location. Would you like help with specific colleges?",
+                'scholarship': "There are many scholarship opportunities available! Check our Scholarships section for merit-based, need-based, and category-specific options.",
+                'default': "I'm here to help with your career questions! You can ask me about different career paths, colleges, entrance exams, scholarships, or any specific concerns you have."
+            };
+
+            const lowerMessage = message.toLowerCase();
+            for (const [key, response] of Object.entries(responses)) {
+                if (lowerMessage.includes(key)) {
+                    return response;
+                }
+            }
+            return responses.default;
+        }
+
+        // Utility functions for other features
+        function bookMentor() {
+            alert('Mentor booking feature will connect you with industry experts. This would typically integrate with a booking system.');
+        }
+
+        function applyScholarship() {
+            alert('Scholarship application portal would open here. This would integrate with scholarship databases and application systems.');
+        }
+
+        function addNewApplication() {
+            const count = document.getElementById('applicationCount');
+            count.textContent = parseInt(count.textContent) + 1;
+            alert('New application added to your tracker!');
+        }
+
+        function viewAllProgress() {
+            alert('Detailed progress view would show comprehensive tracking of all applications, deadlines, and milestones.');
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('streamModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Add some interactive animations on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        window.addEventListener('load', function() {
+            const elements = document.querySelectorAll('.stream-card, .feature-card');
+            elements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'all 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
